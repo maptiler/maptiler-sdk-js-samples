@@ -1,4 +1,4 @@
-//code from https://github.com/aesqe/mapboxgl-minimap adapted to maplibre. 
+//code from https://github.com/aesqe/mapboxgl-minimap adapted to MapTiler SDK JS.
 class minimapControl {
   _ticking = false;
   _lastMouseMoveEvent = null;
@@ -16,7 +16,7 @@ class minimapControl {
     height: "180px",
     center: [0, 0],
     zoom: 0,
-    
+
     // should be a function; will be bound to Minimap
     zoomAdjust: null,
 
@@ -69,7 +69,10 @@ class minimapControl {
   onAdd(map) {
     this._parentMap = map;
 
-    const miniMap = this._miniMap = new maplibregl.Map({
+    const miniMap = this._miniMap = new maptilersdk.Map({
+      attributionControl: false,
+      navigationControl: false,
+      geolocateControl: false,
       attributionControl: false,
       container: this._container,
       style: this._options.style || this._parentMap.getStyle(),
@@ -174,7 +177,7 @@ class minimapControl {
     this._isDragging = false;
     this._ticking = false;
   }
-  
+
   _mouseMove(e){
     this._ticking = false;
 

@@ -3,45 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reverse geocoding</title>
+  <title>Search a placename</title>
   <script src="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.umd.min.js"></script>
   <link href="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.css" rel="stylesheet" />
   <style>
     body { margin: 0; padding: 0; }
     #map { position: absolute; top: 0; bottom: 0; width: 100%; }
-    #results {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 30%;
-      overflow: auto;
-      background: rgba(255, 255, 255, 0.8);
-    }
-    #results ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-    #results ul li {
-      padding: 10px;
-      cursor: pointer;
-      border-bottom: 1px solid gray;
-    }
-    #results ul li:hover {
-      color: gray;
-    }
-    #results ul li:last-child{
-      border-bottom-width: 0;
-    }
   </style>
 </head>
 <body>
   <div id="map"></div>
-  <div id="results">
-    <ul id="search-results">
-    </ul>
-  </div>
   <script>
+      const urlParams = new URLSearchParams(window.location.search);
       maptilersdk.config.apiKey = 'YOUR_MAPTILER_API_KEY_HERE';
       const map = new maptilersdk.Map({
         container: 'map', // container's id or the HTML element to render the map
@@ -49,7 +22,7 @@
         center: [16.62662018, 49.2125578], // starting position [lng, lat]
         zoom: 14, // starting zoom
       });
-      map.on('load', () => {
+      map.on('load', async () => {
         map.addSource('search-results', {
             type: 'geojson',
             data: {
@@ -68,20 +41,13 @@
             },
             'filter': ['==', '$type', 'Point']
         });
-      });
-      map.on('click', async (e) => {
-        const {lng, lat} = e.lngLat;
-        const results = await maptilersdk.geocoding.reverse([lng, lat]);
-        const map = e.target;
-        map.getSource('search-results').setData(results);
-        const bounds = results.features.reduce(function (bounds, feature) {
-            return bounds.extend(feature.bbox);
-        }, new maptilersdk.LngLatBounds(results.features[0].bbox));
-        map.fitBounds(bounds);
-        const resultList = results.features.map((feature) => {
-          return `<li onClick="map.fitBounds([${feature.bbox}], {maxZoom: 19})">${feature.place_name}</li>`
-        });
-        document.getElementById('search-results').innerHTML = resultList.join('');
+        if (urlParams.get('q')) {
+          const results = await maptilersdk.geocoding.forward(urlParams.get('q'));
+          map.getSource('search-results').setData(results);
+          if (results.features[0]) {
+            map.fitBounds(results.features[0].bbox, {maxZoom: 19})
+          }
+        }
       });
   </script>
 </body>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Display a GeoJSON polygon layer</title>
+  <title>Display a GeoJSON line layer</title>
   <script src="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.umd.min.js"></script>
   <link href="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.css" rel="stylesheet" />
   <style>
@@ -17,25 +17,25 @@
     maptilersdk.config.apiKey = 'YOUR_MAPTILER_API_KEY_HERE';
     const map = new maptilersdk.Map({
       container: 'map', // container's id or the HTML element to render the map
-      style: maptilersdk.MapStyle.STREETS,
-      center: [-43.206091, -22.920387], // starting position [lng, lat]
-      zoom: 11, // starting zoom
+      style: maptilersdk.MapStyle.OUTDOOR,
+      center: [-110.75954, 43.72874], // starting position [lng, lat]
+      zoom: 13.5, // starting zoom
     });
     map.on('load', async function() {
       const geojson = await maptilersdk.data.get('YOUR_MAPTILER_DATASET_ID_HERE');
-      map.addSource('rio_cats', {
-        type: 'geojson',
-        data: geojson
+      map.addSource('gps_tracks', {
+        'type': 'geojson',
+        'data': geojson
       });
       map.addLayer({
-          'id': 'rio_cats',
-          'type': 'fill',
-          'source': 'rio_cats',
-          'layout': {},
-          'paint': {
-              'fill-color': '#98b',
-              'fill-opacity': 0.8
-          }
+        'id': 'grand_teton',
+        'type': 'line',
+        'source': 'gps_tracks',
+        'layout': {},
+        'paint': {
+          'line-color': '#e11',
+          'line-width': 4
+        }
       });
     });
   </script>

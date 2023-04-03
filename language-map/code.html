@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Display a 3D terrain map</title>
+  <title>Change the map labels language</title>
   <script src="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.umd.min.js"></script>
   <link href="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.css" rel="stylesheet" />
   <style>
@@ -15,17 +15,15 @@
   <div id="map"></div>
   <script>
       maptilersdk.config.apiKey = 'YOUR_MAPTILER_API_KEY_HERE';
+      maptilersdk.config.primaryLanguage = maptilersdk.Language.JAPANESE;
       const map = new maptilersdk.Map({
         container: 'map', // container's id or the HTML element to render the map
-        style: maptilersdk.MapStyle.OUTDOOR,
-        center: [6.85684, 45.83595], // starting position [lng, lat]
-        zoom: 14, // starting zoom
-        terrain: true,
-        terrainControl: true,
-        pitch: 61,
-        bearing: 172,
-        maxPitch: 85,
-        maxZoom: 14
+        style: maptilersdk.MapStyle.STREETS,
+        center: [11.78, 43.35], // starting position [lng, lat]
+        zoom: 3.51, // starting zoom
+      });
+      map.on('load', async function() {
+        map.setLanguage(maptilersdk.Language.ARABIC);
       });
   </script>
 </body>

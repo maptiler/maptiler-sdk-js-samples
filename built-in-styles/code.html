@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Display a map</title>
+  <script src="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.umd.min.js"></script>
+  <link href="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.css" rel="stylesheet" />
+  <style>
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    .mapstyles-select { position: relative; top: 5px; left: 5px; z-index: 1000; }
+  </style>
+</head>
+<body>
+  <select class="mapstyles-select">
+    <optgroup label="Navigation and city exploration">
+      <option value="STREETS">STREETS</option>
+      <option value="STREETS.DARK">STREETS.DARK</option>
+      <option value="STREETS.LIGHT">STREETS.LIGHT</option>
+      <option value="STREETS.PASTEL">STREETS.PASTEL</option>
+    </optgroup>
+    <option value="OUTDOOR">OUTDOOR</option>
+    <option value="WINTER">WINTER</option>
+    <option value="SATELLITE">SATELLITE</option>
+    <option value="HYBRID" selected>HYBRID</option>
+    <optgroup label="Data visualization">
+      <option value="DATAVIZ">DATAVIZ</option>
+      <option value="DATAVIZ.DARK">DATAVIZ.DARK</option>
+      <option value="DATAVIZ.LIGHT">DATAVIZ.LIGHT</option>
+    </optgroup>
+  </select>
+  <div id="map"></div>
+  <script>
+      maptilersdk.config.apiKey = 'YOUR_MAPTILER_API_KEY_HERE';
+      const map = new maptilersdk.Map({
+        container: 'map', // container's id or the HTML element to render the map
+        center: [16.62662018, 49.2125578], // starting position [lng, lat]
+        zoom: 14, // starting zoom
+      });
+      map.setStyle(maptilersdk.MapStyle.HYBRID);
+      document.querySelector('.mapstyles-select').addEventListener('change', (e) => {
+        const style_code = e.target.value.split(".");
+        style_code.length === 2 ? map.setStyle(maptilersdk.MapStyle[style_code[0]][style_code[1]]) : map.setStyle(maptilersdk.MapStyle[style_code[0]]);
+      });
+  </script>
+</body>
+</html>

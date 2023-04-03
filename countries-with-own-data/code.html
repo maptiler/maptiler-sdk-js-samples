@@ -2,22 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Display a countries choropleth map with your own data</title>
-  <script src="https://cdn.maptiler.com/maplibre-gl-js/v2.4.0/maplibre-gl.js"></script>
-  <link href="https://cdn.maptiler.com/maplibre-gl-js/v2.4.0/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.umd.min.js"></script>
+  <link href="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.css" rel="stylesheet" />
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
-    #map {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 100%;
-    }
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
   </style>
 </head>
 <body>
@@ -86,20 +77,18 @@
           setStates();
         }
       }
-      const key = 'YOUR_MAPTILER_API_KEY_HERE';
-      const map = new maplibregl.Map({
-        container: 'map', // container id
-        style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${key}`, // style URL
+      maptilersdk.config.apiKey = 'YOUR_MAPTILER_API_KEY_HERE';
+      const map = new maptilersdk.Map({
+        container: 'map', // container's id or the HTML element to render the map
+        style: maptilersdk.MapStyle.DATAVIZ.LIGHT,
         center: [13.39, 52.51], // starting position [lng, lat]
         zoom: 2, // starting zoom
       });
-      map.addControl(new maplibregl.NavigationControl(), 'top-left');
       map.on('load', function() {
         map.addSource('statesData', {
           type: 'vector',
-          url: `https://api.maptiler.com/tiles/countries/tiles.json?key=${key}`
+          url: `https://api.maptiler.com/tiles/countries/tiles.json`
         });
-
         // Find the id of the first symbol layer in the map style
         const layers = map.getStyle().layers;
         let firstSymbolId;
@@ -109,7 +98,6 @@
             break;
           }
         }
-
         map.addLayer(
           {
             'id': 'countries',
@@ -118,9 +106,9 @@
             'type': 'fill',
             'filter': ['==', 'level', 0],
             'paint': {
-                'fill-color': ['case',
+              'fill-color': ['case',
                   ['!=', ['to-number', ['feature-state', 'population']], 0],
-                  ['interpolate', ['linear'], ['feature-state', 'population'], 
+                  ['interpolate', ['linear'], ['feature-state', 'population'],
                     5000000, 'rgba(222,235,247,1)', 90000000, 'rgba(49,130,189,1)'
                   ],
                   'rgba(0, 0, 0, 0)'
@@ -134,7 +122,7 @@
       });
       map.on('data', afterLoad);
       map.on('click', 'countries', function (e) {
-        new maplibregl.Popup()
+        new maptilersdk.Popup()
           .setLngLat(e.lngLat)
           .setHTML(`<h3>Population</h3><p>${e.features[0].state.population.toLocaleString()}</p>`)
           .addTo(map);
