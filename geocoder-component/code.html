@@ -6,7 +6,7 @@
   <title>MapTiler Geocoder component</title>
   <script src="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.umd.min.js"></script>
   <link href="https://cdn.maptiler.com/maptiler-sdk-js/latest/maptiler-sdk.css" rel="stylesheet" />
-  <script src="https://unpkg.com/@maptiler/geocoding-control@latest/maplibregl.umd.js"></script>
+  <script src="https://unpkg.com/@maptiler/geocoding-control@latest/maptilersdk.umd.js"></script>
   <link href="https://unpkg.com/@maptiler/geocoding-control@latest/style.css" rel="stylesheet">
   <style>
     body { margin: 0; padding: 0; }
@@ -23,11 +23,10 @@
         center: [16.62662018, 49.2125578], // starting position [lng, lat]
         zoom: 14, // starting zoom
       });
-      const gc = new maplibreglMaptilerGeocoder.GeocodingControl({
+      const gc = new maptilersdkMaptilerGeocoder.GeocodingControl({
         apiKey: maptilersdk.config.apiKey,
         class: 'geocoder',
         showResultsWhileTyping: true,
-        maplibregl: maptilersdk
       });
       map.addControl(gc, 'top-left');
   </script>
