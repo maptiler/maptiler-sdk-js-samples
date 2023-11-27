@@ -1,6 +1,8 @@
 # MapTiler SDK JS code samples
 
-### Check out the full list of examples and the official documentation at [MapTiler SDK JS](https://docs.maptiler.com/sdk-js/)
+![maintenance-status](https://img.shields.io/badge/maintenance-deprecated-red.svg)
+
+### Check out the full list of updated examples and the official documentation at [MapTiler SDK JS](https://docs.maptiler.com/sdk-js/)
 
 :warning: you will need to replace **YOUR_MAPTILER_API_KEY_HERE** with your own MapTiler API key.
 
